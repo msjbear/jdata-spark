@@ -1,0 +1,34 @@
+<assembly>
+    <id>assembly</id>
+    <!-- zip,tar,tar.gz,tar.bz2,jar,dir,war -->
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>data</directory>
+        </fileSet>
+        <fileSet>
+            <directory>shell</directory>
+        </fileSet>
+        <fileSet>
+            <directory>script</directory>
+        </fileSet>
+        <fileSet>
+            <directory>result</directory>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}\src\main\resources</directory>
+            <outputDirectory>conf</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <includes>
+                <include>target/jdata-*.jar</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>lib</directory>
+            <outputDirectory>lib</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>
