@@ -9,7 +9,7 @@ create table if not exists dev.dev_temp_msj_risk_jdata_feature_user_sku_dim_v3_p
 	user_sku_15days_action.`(user_id|sku_id)?+.+`
 from
 (
-	select user_id,sku_id,
+	select user_id,sku_id,action_brand,
 		sum(case when action_type=1 then 1 else 0 end) as user_sku_month_browse_cnt,
 		sum(case when action_type=2 then 1 else 0 end) as user_sku_month_add_cart_cnt,
 		sum(case when action_type=3 then 1 else 0 end) as user_sku_month_del_cart_cnt, 
@@ -55,7 +55,7 @@ from
 		
 	from dev.dev_temp_msj_risk_jdata_action_wide_table 
 	where substring(action_time,1,10)>=date_sub('${current_date}',30) and substring(action_time,1,10)<='${current_date}'  and action_cate = 6
-	group by user_id,sku_id
+	group by user_id,sku_id,action_brand
 ) user_sku_month_action
 left outer join
 (
