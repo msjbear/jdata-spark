@@ -1,0 +1,17 @@
+*.gitignore
+*.iml
+.idea/
+.git/
+data/
+metastore_db/
+jrdm-dm/target/
+*.sh
+*.log
+*.properties
+.temp.crc
+4d945c5e-b8db-46bc-a2a3-fc7a2fe20081/
+75c3ec07-be9d-407c-8dea-669f6bb6e8dc/
+jrdm/
+receivedBlockMetadata/
+temp
+target/

@@ -7,6 +7,7 @@ import com.sjmei.jdata.sparkml.RandomForestTask.Params
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.ml.linalg.DenseVector
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.utils.Logging
 import org.apache.spark.{SparkConf, SparkContext}
@@ -277,6 +278,24 @@ object AlgoUtils extends Logging {
     println(sw.toString())
 
     sw.toString
+  }
+
+  def readDelimitedData(sc: SparkContext, path: String, delimiter: String, numPartitions: Int): RDD[(LabeledPoint,Int,Int)] = {
+    val data = sc.textFile(path).filter{x => x.split(delimiter)(0).toDouble == 1.0}.repartition(numPartitions).mapPartitions{x => Iterator(x.toArray)}
+    val formatData = data.mapPartitionsWithIndex{(partitionId,iter) =>
+      var result = List[(LabeledPoint,Int,Int)]()
+      val dataArray = iter.next
+      val dataArraySize = dataArray.size - 1
+      var rowCount = dataArraySize
+      for (i <- 0 to dataArraySize) {
+        val parts = dataArray(i).split(delimiter)
+        result.::=((LabeledPoint(parts(0).toDouble, breeze.linalg.DenseVector(parts.slice(1,parts.length)).map(_.toDouble)),partitionId, rowCount))
+        rowCount = rowCount - 1
+      }
+      result.iterator
+    }
+
+    formatData
   }
 
 }
